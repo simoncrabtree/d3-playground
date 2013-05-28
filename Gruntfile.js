@@ -39,7 +39,8 @@ module.exports = function (grunt) {
             all: {
                 files: [
                     appRoot + '/**/*.js',
-                    appRoot + '/**/*.html'
+                    appRoot + '/**/*.html',
+                    appRoot + '/**/*.css'
                 ],
                 tasks: ['livereload']
             }

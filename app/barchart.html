@@ -6,7 +6,7 @@
 div.bar {
     display: inline-block;
     width: 20px;
-    background-color: teal;
+    background-color: lime;
     margin-right: 2px;
 }
   </style>
@@ -16,7 +16,7 @@ div.bar {
   <script>
 var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
                 11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
-    
+
     var svg = d3.select("body").append("svg");
 
     var h = 100;
@@ -24,7 +24,7 @@ var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
     var barPadding = 1;
     var barWidth = w/dataset.length - barPadding;
 
-    svg.attr("width", w)
+    svg.attr("width", "100%")
         .attr("height", h);
 
     svg.selectAll("rect")

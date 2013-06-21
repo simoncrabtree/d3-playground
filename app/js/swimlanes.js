@@ -2,6 +2,7 @@ threeXdiary = function (el) {
 
     var container = d3.select(el)[0][0];
     var svg, x, dragging;
+    var chart;
 
     var margin = {
         left: 150,
@@ -14,18 +15,64 @@ threeXdiary = function (el) {
     var timeDomainStart;
     var timeDomainEnd;
 
-
-
-
-
-
     function diary (tasks, engineers) {
+
+        chart = d3.select(el)
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height)
+            .attr('class', 'chart');
+
+        chart.append('defs')
+            .append('clipPath')
+            .append('rect')
+            .attr('width', width)
+            .attr('height', height);
+
+        var main = chart.append('g')
+            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+            .attr('width', width)
+            .attr('height', height);
+
+        //horizontal division lines
+        main.append('g')
+            .selectAll('.laneLines')
+            .data(engineers)
+            .enter()
+            .append('line')
+            .attr('x1', 0)
+            .attr('y1', function (engineer, i) {return i * 50})
+            .attr('x2', width)
+            .attr('y2', function (engineer, i) {return i * 50})
+            .attr('stroke', 'lightgray');
+
+        //engineer name labels
+        main.append('g')
+            .selectAll('.laneLabel')
+            .data(engineers)
+            .enter()
+            .append('text')
+            .text(function (engineer) { return engineer; })
+            .attr('x', 0)
+            .attr('y', function (engineer, i) {return (i * 50) +25})
+            .attr('dy', '0.5ex')
+            .attr('text-anchor', 'end')
+            .attr('class', 'laneLabel');
+
+        var xDateAxis = d3.svg.axis()
+            .scale(x)
+            .orient('bottom')
+
+
+        main.append('g')
+            .call(xDateAxis)
 
         timeDomainStart = d3.min(tasks, function (item) {return item.startDate});
         timeDomainEnd = d3.max(tasks, function (item) {return item.endDate});
 
 
         x = d3.time.scale().domain([timeDomainStart, timeDomainEnd]).range([0, width]).clamp(true);
+
         var y = d3.scale.ordinal().domain(engineers).rangeRoundBands([0, height], .2);
 
         var xAxis = d3.svg.axis()
@@ -134,7 +181,6 @@ threeXdiary = function (el) {
         }
 
         //console.log("x.scale", x.domain()[1] + 200);
-        redraw();
     };
 
     return diary;
@@ -151,6 +197,6 @@ var tasks = [
 
 var engineerNames = ["Paul", "Dave", "Steve", "Andy", "Justine"];
 
-var diary = threeXdiary(".diary-container");
+var diary = threeXdiary(".container");
 diary(tasks, engineerNames);
 

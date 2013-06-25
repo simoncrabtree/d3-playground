@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="./libs/d3.v3.js"></script>
+<script src="http://www.mentful.com/gantt-chart-d3v2.js"></script>
+<style>
+html, body{
+    width: 100%,
+    height: 100%
+}
+div.bar {
+    display: inline-block;
+    width: 20px;
+    background-color: teal;
+    margin-right: 2px;
+}
+</style>
+</head>
+<body>
+<h1>gantt</h1>
+
+<script>
+var tasks = [
+    {startDate: new Date(2013, 5, 5), endDate: new Date(2013, 5, 6), taskName: "Simon", status: "Success"},
+    {startDate: new Date(2013, 5, 5), endDate: new Date(2013, 5, 6), taskName: "Dave", status: "Success"}
+];
+var taskNames = ["Simon", "Dave", "Ian"];
+var taskStatus = {
+    "Success": "bar"
+};
+var format = "%H:%M";
+var gantt = d3.gantt().taskTypes(taskNames).taskStatus(taskStatus).tickFormat(format);
+gantt(tasks);
+</script>
+</body>
+</html>

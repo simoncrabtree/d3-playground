@@ -1,7 +1,28 @@
+
 body {
 	background-color: #eee;
 }
 
 .axis line{
 	stroke: #000;
+}
+
+.date-window text {
+	font-family: sans-serif;
+ 	fill: #777;
+}
+
+.date-header {
+	font-size: 18px;
+}
+
+rect.diary-entry {
+	fill: lime;
+	stroke: green;
+}
+
+line.lane {
+	stroke: #999;
+	stroke-width: 1;
+	shape-rendering: crispEdges;
 }

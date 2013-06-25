@@ -4,18 +4,32 @@
 	<link rel="stylesheet" type="text/css" href="./css/engineerDiary.css">
   <script src="./libs/d3.v3.js"></script>
   <script src="./js/engineerDiary.js"></script>
+</style>
 </head>
 <body>
 	<h1>Test</h1>
-	<div class='diary-container'></div>
+  <button onclick="zoomout()">Zoom Out</button> | <button onclick="zoomin()">Zoom In</button>
+  <div class='diary-container'></div>
   <script>
-  	var diaryData = {
-  		engineers: [
-  		]
-  	}
-  	var diary = threex.engineerDiary('.diary-container', diaryData);
+  var engineers = ["Dave", "Simon"];
 
+  var diaryItems = [
+      {engineer: "Dave", startDate: new Date(2013,4,24,17,30), endDate: new Date(2013,4,24,17,50)},
+      {engineer: "Dave", startDate: new Date(2013,4,19,10,0), endDate: new Date(2013,4,19,17,30)},
+      {engineer: "Dave", startDate: new Date(2013,4,21,15,0), endDate: new Date(2013,4,21,16,0)},
+      {engineer: "Simon", startDate: new Date(2013,4,20,0,0), endDate: new Date(2013,4,20,23,59,999)}
+  ];
 
+  var diary = threex.engineerDiary('.diary-container', engineers);
+  diary.setData(diaryItems);
+
+  var zoomout = function () {
+    diary.zoomout();
+  };
+
+  var zoomin = function () {
+    diary.zoomin();
+  };
   </script>
 </body>
 </html>

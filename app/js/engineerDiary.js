@@ -13,8 +13,8 @@ threex.engineerDiary = function (el, engineers) {
 	var laneHeight = 64;
 	var height = laneHeight * engineers.length;
 
-	var windowDateStart = new Date("2013-05-09");
-	var windowDateEnd = new Date("2013-05-30");
+	var windowDateStart = new Date("2013-05-15");
+	var windowDateEnd = new Date("2013-05-15 23:59:59:999");
 
 	var dateScale = d3.time.scale()
 	.domain([windowDateStart, windowDateEnd])
@@ -28,18 +28,11 @@ threex.engineerDiary = function (el, engineers) {
 	.tickFormat(d3.time.format('%a %-d %b'))
 	.tickValues([windowDateStart, windowDateEnd]);
 
-	var dateAxis = d3.svg.axis()
-	.scale(dateScale)
-	.tickFormat(d3.time.format('%H'))
-	.ticks(d3.time.minutes, 60)
-	.tickSize(6, 0, 0);
-
-	// var engineerAxis = d3.svg.axis()
-	// .scale(engineerScale)
-	// .orient("right")
-	// .tickSize(0);
-
-
+	// var dateAxis = d3.svg.axis()
+	// .scale(dateScale)
+	// .tickFormat(d3.time.format('%H'))
+	// .ticks(d3.time.minutes, 60)
+	// .tickSize(6, 0, 0);
 
 	var dateHeader = container.append('div')
 	.attr('class', 'date-header');
@@ -54,69 +47,75 @@ threex.engineerDiary = function (el, engineers) {
 	var diaryWindow = svg.append('g')
 	.attr('class', 'diary-window');
 
-	// diaryWindow.append('g')
-	// .attr('class', 'engineer-axis')
-	// .call(engineerAxis);
-
 	var engineerAxis = diaryWindow.append('g')
 		.attr('class', 'engineer-axis');
 
-	engineerAxis.selectAll('.engineer')
+	engineerAxis.selectAll()
 		.data(engineers)
 		.enter()
 		.append('line')
 		.attr('class', 'lane')
-		.attr('y1', engineerPositionOnYaxis)
-		.attr('y2', engineerPositionOnYaxis)
+		.attr('y1', getLaneLineYPosition)
+		.attr('y2', getLaneLineYPosition)
 		.attr('x1', 0)
 		.attr('x2', 10000);
+	engineerAxis.selectAll('text')
+		.data(engineers)
+		.enter()
+		.append('text')
+		.text(function (engineer) {
+			return engineer;
+		})
+		.attr('y', function (engineer) {
+			return engineerScale(engineer) + 12;
+		})
+		.attr('class', 'engineer-label')
 
-	function engineerPositionOnYaxis (engineer) {
+
+	function getLaneLineYPosition (engineer) {
 		//adding 0.5 is a hack to get around the 1px
 		//lane divisions sometimes looking like 2px
 		return engineerScale(engineer) + 0.5;
-	};	
+	}
 
 	function diaryEntryPositionOnXaxis (diaryEntry) {
 		return dateScale(diaryEntry.startDate);
 	};
 
 	function diaryEntryWidth (diaryEntry) {
-		var width = dateScale(diaryEntry.endDate) - dateScale(diaryEntry.startDate);
+		var width = (dateScale(diaryEntry.endDate) - dateScale(diaryEntry.startDate));
 		if (width < 1) width = 1;
 		return width;
 	}
 
-	// svg.append('g')
-	// .attr('class', 'x1 axis')
-	// .attr('transform', 'translate(' + margin.left + ', 0)')
-
-	// svg.append('g')
-	// .attr('class', 'x2 axis')
-	// .attr('transform', 'translate(' + margin.left + ', 30)')
-
-	// var dateWindow = svg.append('g')
-	// .attr('class', 'date-window');
-
-
 	function redraw () {
 		width = container[0][0].clientWidth - margin.left - margin.right;
 		dateScale.rangeRound([0, width]);
-		console.log('redraw');
 
 		dateHeader.text(getDateRangeAsString());
 
+		var visibleItems = _items.filter(function (item) {
+			return item.startDate < windowDateEnd && item.endDate > windowDateStart;
+		});
+
 		var diaryEntries = svg.selectAll('.diary-entry')
-			.data(_items)
+			.data(visibleItems)
 			.attr('x', diaryEntryPositionOnXaxis)
+			.attr('y', function (item) {
+				return engineerScale(item.engineer);
+			})
 			.attr('width', diaryEntryWidth);
 
+
 		svg.selectAll('.diary-entry')
-		.data(_items)
+		.data(visibleItems)
 		.enter()
 		.append('rect')
 		.attr('x', diaryEntryPositionOnXaxis)
 		.attr('y', function (item) {
+			if(item.id === 2){
+				console.log("Item2YPos", engineerScale(item.engineer));
+			}
 			return engineerScale(item.engineer);
 		})
 		.attr('width', diaryEntryWidth)
@@ -125,6 +124,14 @@ threex.engineerDiary = function (el, engineers) {
 			return item.id
 		})
 		.attr('class', 'diary-entry')
+		.on('click', function (diaryEntry) {
+			console.log(diaryEntry);
+		});
+
+		svg.selectAll('.diary-entry')
+		.data(visibleItems)
+		.exit()
+		.remove();
 	}
 
 	function getDateRangeAsString () {
@@ -141,6 +148,20 @@ threex.engineerDiary = function (el, engineers) {
 			redraw();
 	}
 
+	function setWindowStart (newValue) {
+		windowDateStart = newValue;
+		updateWindow();
+	}
+	function setWindowEnd (newValue) {
+		windowDateEnd = newValue;
+		updateWindow();
+	}
+
+	function updateWindow () {
+		dateScale.domain([windowDateStart, windowDateEnd]); 
+		redraw();
+	}
+
 	window.onresize = redraw;
 
 	return {
@@ -148,10 +169,20 @@ threex.engineerDiary = function (el, engineers) {
 			zoom(-1);
 		},
 		zoomin: function () {
-			var timePeriod = windowDateEnd - windowDateStart;
-			if (timePeriod > 24 * 60 * 60 * 1000) {
-				zoom(1);
-			}
+			windowDateEnd = d3.time.day.offset(windowDateEnd, -1)
+			updateWindow();
+		},
+		windowStartMinus: function () {
+			setWindowStart(d3.time.hour.offset(windowDateStart, -6));
+		},
+		windowStartPlus: function () {
+			setWindowStart(d3.time.hour.offset(windowDateStart, 6));
+		},
+		windowEndMinus: function () {
+			setWindowEnd(d3.time.hour.offset(windowDateEnd, -6));
+		},
+		windowEndPlus: function () {
+			setWindowEnd(d3.time.hour.offset(windowDateEnd, 6));
 		},
 		setData: function (items) {
 			_items = items;

@@ -17,12 +17,19 @@ body {
 }
 
 rect.diary-entry {
-	fill: lime;
+	fill: green;
 	stroke: green;
+
+	fill-opacity: 0.5;
+	stroke-opacity: 1;
 }
 
 line.lane {
 	stroke: #999;
 	stroke-width: 1;
 	shape-rendering: crispEdges;
+}
+
+.engineer-label {
+	alignment-baseline: hanging;
 }

@@ -8,28 +8,22 @@
 </head>
 <body>
 	<h1>Test</h1>
-  <button onclick="zoomout()">Zoom Out</button> | <button onclick="zoomin()">Zoom In</button>
+  <button onclick="diary.windowStartMinus()">Start -</button><button onclick="diary.windowStartPlus()">Start +</button> | <button onclick="diary.windowEndMinus()">End -</button><button onclick="diary.windowEndPlus()">End +</button>
   <div class='diary-container'></div>
   <script>
   var engineers = ["Dave", "Simon"];
 
   var diaryItems = [
-      {engineer: "Dave", startDate: new Date(2013,4,24,17,30), endDate: new Date(2013,4,24,17,50)},
-      {engineer: "Dave", startDate: new Date(2013,4,19,10,0), endDate: new Date(2013,4,19,17,30)},
-      {engineer: "Dave", startDate: new Date(2013,4,21,15,0), endDate: new Date(2013,4,21,16,0)},
-      {engineer: "Simon", startDate: new Date(2013,4,20,0,0), endDate: new Date(2013,4,20,23,59,999)}
+      {id:1, engineer: "Dave", startDate: new Date(2013,4,24,17,30), endDate: new Date(2013,4,24,17,50)},
+      {id:2, engineer: "Dave", startDate: new Date(2013,4,15,0,0), endDate: new Date(2013,4,15,10,0)},
+      {id:3, engineer: "Dave", startDate: new Date(2013,4,21,15,0), endDate: new Date(2013,4,21,16,0)},
+      {id:4, engineer: "Simon", startDate: new Date(2013,4,15,8,0), endDate: new Date(2013,4,15,10,0)},
+      {id:5, engineer: "Simon", startDate: new Date(2013,4,15,10,0), endDate: new Date(2013,4,15,12,0)}
   ];
 
   var diary = threex.engineerDiary('.diary-container', engineers);
   diary.setData(diaryItems);
 
-  var zoomout = function () {
-    diary.zoomout();
-  };
-
-  var zoomin = function () {
-    diary.zoomin();
-  };
   </script>
 </body>
 </html>

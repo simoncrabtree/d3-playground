@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Test Brush</title>
+<style>
+html, body {
+	height: 100%;
+	width: 100%;
+}
+
+body {
+	background-color: #aaa;
+}
+
+.brush .extent {
+	stroke: #fff;
+	fill-opacity: .125;
+	shape-rendering: crispEdges;
+}
+
+.brush .resize rect {
+}
+</style>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="./js/brushtest.js"></script>
+<body>
+	<h1>Test Brush</h1>
+	<div class='diary'></div>
+	<script>
+	diary('.diary');
+	</script>
+</body>
+</html>

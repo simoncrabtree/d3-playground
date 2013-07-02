@@ -33,3 +33,9 @@ line.lane {
 .engineer-label {
 	alignment-baseline: hanging;
 }
+
+.brush .extent {
+	fill: #000;
+	stroke: #333;
+	fill-opacity: 0.125;
+}

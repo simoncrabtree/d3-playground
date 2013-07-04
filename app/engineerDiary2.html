@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<link rel="stylesheet" type="text/css" href="./css/engineerDiary2.css">
+<script src="./libs/d3.v3.js"></script>
+<script src="./js/engineerDiary2.js"></script>
+<style>
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+</style>
+<body>
+	<h1>Test</h1>
+  <svg class='diary'></svg>
+  <script>
+  var engineers = ["Dave", "Simon"];
+
+  var diaryItems = [
+  {id:1, engineer: "Dave", startDate: new Date(2013,4,24,17,30), endDate: new Date(2013,4,24,17,50)},
+  {id:2, engineer: "Dave", startDate: new Date(2013,4,15,0,0), endDate: new Date(2013,4,15,10,0)},
+  {id:3, engineer: "Dave", startDate: new Date(2013,4,21,15,0), endDate: new Date(2013,4,21,16,0)},
+  {id:4, engineer: "Simon", startDate: new Date(2013,4,15,8,0), endDate: new Date(2013,4,15,10,0)},
+  {id:5, engineer: "Simon", startDate: new Date(2013,4,15,10,0), endDate: new Date(2013,4,15,12,0)}
+  ];
+
+  var diary = new threeX.EngineerDiary('.diary', engineers, diaryItems);
+
+  </script>
+</body>
